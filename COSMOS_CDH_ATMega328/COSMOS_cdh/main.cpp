@@ -8,6 +8,8 @@
 
 #include <Arduino.h>
 
+#include "CommandList.h"
+
 void handleCommand();
 void sendTelemetry();
 void writeTelemetry(const char* pkt, byte size);
@@ -15,11 +17,6 @@ void writeTelemetry(const char* pkt, byte size);
 // LED pins, used for testing commands
 #define LED_OUTPUT_PIN 7
 #define LED_INPUT_PIN 9
-
-// define all commands in hex
-#define CMD_NO_OP_TEST 0x00
-#define CMD_LED_ON 0x01
-#define CMD_LED_OFF 0x02
 
 // defines default command size in bytes
 #define TOTAL_CMD_SIZE_IN_BYTES 4
