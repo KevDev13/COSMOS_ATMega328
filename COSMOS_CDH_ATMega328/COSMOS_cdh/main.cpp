@@ -9,7 +9,7 @@
 #include <Arduino.h>
 
 void handleCommand();
-void processTelemetry();
+void sendTelemetry();
 void writeTelemetry(const char* pkt, byte size);
 
 // LED pins, used for testing commands
@@ -70,7 +70,7 @@ void loop()
 {
   handleCommand();
   delay(50);
-  processTelemetry();
+  sendTelemetry();
   delay(50);
 }
 
@@ -117,7 +117,7 @@ void handleCommand()
   }
 }
 
-void processTelemetry()
+void sendTelemetry()
 {
   // set LED state in LED packet
   ledData.ledState = digitalRead(LED_INPUT_PIN);
