@@ -11,9 +11,9 @@
 #ifndef COMMANDLIST_H_
 #define COMMANDLIST_H_
 
-#define CMD_NO_OP_TEST 0x00
+#define CMD_NO_OP_TEST 0x00	// test command, does nothing
 
-#define CMD_LED_ON 0x01
-#define CMD_LED_OFF 0x02
+#define CMD_LED_ON 0x01	// command LED on pin LED_OUTPUT_PIN to ON
+#define CMD_LED_OFF 0x02	//command LED on pin LED_OUTPUT_PIN to OFF
 
 #endif /* COMMANDLIST_H_ */

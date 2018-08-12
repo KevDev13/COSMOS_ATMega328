@@ -88,9 +88,11 @@ void handleCommand()
     ++count;
   }
 
+  // increment number of command counts
+  // TODO: check for int overflow
   ++cmdData.commandCount;
 
-  // take the command array and concatenate the 2 bytes into an int we can actually use
+  // take the command array and concatenate the bytes into a number we can actually use
   uint32_t cmd2execute = 0;
   // bitwise shift the bytes in the array onto the command
   cmd2execute = (command[3] << 24) | (command[2] << 16) | (command[1] << 8) | command[0];
@@ -110,6 +112,7 @@ void handleCommand()
   }
   else
   { // didn't match any known commands, so increment invalid command counter
+  // TODO: check for int overflow
     ++cmdData.invalidCommandCount;
   }
 }
@@ -130,6 +133,7 @@ void sendTelemetry()
 void writeTelemetry(const char* pkt, byte size)
 { // go through each byte in the packet and send it
   // COSMOS should be configured to little endian for any data larger than 1 byte
+  // for data of just 1 byte it technically doesn't matter if COSMOS is little or big endian
   for(int c = 0; c < size; ++c)
   {
     Serial.write(pkt[c]);
