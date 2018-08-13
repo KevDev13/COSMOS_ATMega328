@@ -29,8 +29,8 @@ typedef struct
 {
 	byte length;
 	byte pktID;
-	uint32_t commandCount;  //total command count
-	uint32_t invalidCommandCount; // total invalid commands
+	uint16_t commandCount;  //total command count
+	uint16_t invalidCommandCount; // total invalid commands
 } Pkt_CommandData;
 
 // example packet - LED state
@@ -89,8 +89,8 @@ void handleCommand()
   }
 
   // increment number of command counts
-  // TODO: check for int overflow
-  ++cmdData.commandCount;
+  if(cmdData.commandCount >= 65535) { cmdData.commandCount = 0; }
+  else { ++cmdData.commandCount; }
 
   // take the command array and concatenate the bytes into a number we can actually use
   uint32_t cmd2execute = 0;
@@ -112,8 +112,8 @@ void handleCommand()
   }
   else
   { // didn't match any known commands, so increment invalid command counter
-  // TODO: check for int overflow
-    ++cmdData.invalidCommandCount;
+	if(cmdData.invalidCommandCount >= 65535) { cmdData.invalidCommandCount = 0; }
+	else { ++cmdData.invalidCommandCount; }
   }
 }
 
