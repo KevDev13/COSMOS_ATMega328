@@ -6,6 +6,10 @@
  * kg.dev@protonmail.com or kevin@kev-dev.net
  */
 
+#pragma pack(1)	// forces no additional padding of data in structs; used to save memory
+				// note that this does decrease effciency in CPU time, so may be removed and only
+				// applied when necessary around structs using #pragma pack (push, 1) then #pragma pack(pop)
+
 #include <Arduino.h>
 
 #include "CommandList.h"
@@ -89,7 +93,7 @@ void handleCommand()
   }
 
   // increment number of command counts
-  if(cmdData.commandCount >= 65535) { cmdData.commandCount = 0; }
+  if(cmdData.commandCount >= UINT16_MAX) { cmdData.commandCount = 0; }
   else { ++cmdData.commandCount; }
 
   // take the command array and concatenate the bytes into a number we can actually use
@@ -112,7 +116,7 @@ void handleCommand()
   }
   else
   { // didn't match any known commands, so increment invalid command counter
-	if(cmdData.invalidCommandCount >= 65535) { cmdData.invalidCommandCount = 0; }
+	if(cmdData.invalidCommandCount >= UINT16_MAX) { cmdData.invalidCommandCount = 0; }
 	else { ++cmdData.invalidCommandCount; }
   }
 }
