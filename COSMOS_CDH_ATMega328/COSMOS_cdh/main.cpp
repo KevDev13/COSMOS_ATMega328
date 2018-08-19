@@ -6,8 +6,8 @@
  * kg.dev@protonmail.com or kevin@kev-dev.net
  */
 
-#pragma pack(1)	// forces no additional padding of data in structs; used to save memory
-				// note that this does decrease effciency in CPU time, so may be removed and only
+//#pragma pack(1)	// forces no additional padding of data in structs; used to save memory
+				// note that this does decrease efficiency in CPU time, so may be removed and only
 				// applied when necessary around structs using #pragma pack (push, 1) then #pragma pack(pop)
 
 #include <Arduino.h>
@@ -35,7 +35,8 @@ typedef struct
 	byte pktID;
 	uint16_t commandCount;  //total command count
 	uint16_t invalidCommandCount; // total invalid commands
-} Pkt_CommandData;
+} __attribute__((packed)) Pkt_CommandData;
+// attribute packed guarantees that there will be no padding in memory when storing the struct
 
 // example packet - LED state
 typedef struct
