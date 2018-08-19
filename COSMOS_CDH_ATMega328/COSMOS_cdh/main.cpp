@@ -6,7 +6,13 @@
  * kg.dev@protonmail.com or kevin@kev-dev.net
  */
 
+#pragma pack(1)	// forces no additional padding of data in structs; used to save memory
+				// note that this does decrease effciency in CPU time, so may be removed and only
+				// applied when necessary around structs using #pragma pack (push, 1) then #pragma pack(pop)
+
 #include <Arduino.h>
+
+#include "CommandList.h"
 
 void handleCommand();
 void sendTelemetry();
@@ -15,11 +21,6 @@ void writeTelemetry(const char* pkt, byte size);
 // LED pins, used for testing commands
 #define LED_OUTPUT_PIN 7
 #define LED_INPUT_PIN 9
-
-// define all commands in hex
-#define CMD_NO_OP_TEST 0x00
-#define CMD_LED_ON 0x01
-#define CMD_LED_OFF 0x02
 
 // defines default command size in bytes
 #define TOTAL_CMD_SIZE_IN_BYTES 4
@@ -32,8 +33,8 @@ typedef struct
 {
 	byte length;
 	byte pktID;
-	uint32_t commandCount;  //total command count
-	uint32_t invalidCommandCount; // total invalid commands
+	uint16_t commandCount;  //total command count
+	uint16_t invalidCommandCount; // total invalid commands
 } Pkt_CommandData;
 
 // example packet - LED state
@@ -91,9 +92,11 @@ void handleCommand()
     ++count;
   }
 
-  ++cmdData.commandCount;
+  // increment number of command counts
+  if(cmdData.commandCount >= UINT16_MAX) { cmdData.commandCount = 0; }
+  else { ++cmdData.commandCount; }
 
-  // take the command array and concatenate the 2 bytes into an int we can actually use
+  // take the command array and concatenate the bytes into a number we can actually use
   uint32_t cmd2execute = 0;
   // bitwise shift the bytes in the array onto the command
   cmd2execute = (command[3] << 24) | (command[2] << 16) | (command[1] << 8) | command[0];
@@ -113,7 +116,8 @@ void handleCommand()
   }
   else
   { // didn't match any known commands, so increment invalid command counter
-    ++cmdData.invalidCommandCount;
+	if(cmdData.invalidCommandCount >= UINT16_MAX) { cmdData.invalidCommandCount = 0; }
+	else { ++cmdData.invalidCommandCount; }
   }
 }
 
@@ -133,6 +137,7 @@ void sendTelemetry()
 void writeTelemetry(const char* pkt, byte size)
 { // go through each byte in the packet and send it
   // COSMOS should be configured to little endian for any data larger than 1 byte
+  // for data of just 1 byte it technically doesn't matter if COSMOS is little or big endian
   for(int c = 0; c < size; ++c)
   {
     Serial.write(pkt[c]);
