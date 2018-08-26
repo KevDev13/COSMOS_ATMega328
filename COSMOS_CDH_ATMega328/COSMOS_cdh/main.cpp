@@ -11,6 +11,7 @@
 				// applied when necessary around structs using #pragma pack (push, 1) then #pragma pack(pop)
 
 #include <Arduino.h>
+#include <stdint.h>
 
 #include "CommandList.h"
 
