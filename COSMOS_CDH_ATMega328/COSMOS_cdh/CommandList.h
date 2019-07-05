@@ -15,5 +15,6 @@
 
 #define CMD_LED_ON 0x01	// command LED on pin LED_OUTPUT_PIN to ON
 #define CMD_LED_OFF 0x02	//command LED on pin LED_OUTPUT_PIN to OFF
+#define test123 0x03
 
 #endif /* COMMANDLIST_H_ */
